@@ -43,13 +43,13 @@ When GCC is calculated over a long time period at a site, a timeseries of vegeta
 
 #### Seasonal Transition Dates
 
-Finally, these GCC timeseries can be used to extract seasonal transition dates across the years. For example, to determine the timing of spring green-up, we can used the amplitude (height) of each annual peak to determine when (what day of the year) vegetation at the site has reached either 10%, 25%, or 50% of it's maximum greenness. We consider this the start of spring green-up. We use a similar method to extract the start of autumn brown-down.
+These GCC timeseries can be used to extract seasonal transition dates across the years. For example, to determine the timing of spring green-up, we can use the amplitude (height) of each annual peak to determine when (what day of the year) vegetation at the site has reached either 10%, 25%, or 50% of it's maximum greenness. We consider this to be the start of spring green-up. We use a similar method to extract the start of autumn brown-down.
 
 ![The dates of spring green-up (green symbols) and autumn brown-down (brown symbols) can be extracted from the GCC timeseries.](transition%20dates.png){fig-align="center" width="400"}
 
-Over a long time period, the timing of seasonal transition dates can be used to track shifts in vegetation phenology, such as with climate change. This dataset can also be used to understand what environmental and biologic factors (e.g., temperature, rainfall, sunlight) influence the timing of spring leaf-out and/or autumn color changes.
+Over a long time period, the timing of seasonal transition dates can be used to track shifts in vegetation phenology, such as with climate change. This dataset can also be used to understand what environmental and biologic factors (e.g., temperature, rainfall, sunlight) influence the timing of spring leaf-out and autumn color changes.
 
-![Seasonal transition dates at a forest site in Canada (lacclair) over the past 9 years.](transition%20dates_timeseries.png){fig-align="center"}
+![Seasonal transition dates at a deciduous forest site in Canada (lacclair) over the past 9 years.](transition%20dates_timeseries.png){fig-align="center"}
 
 #### Your turn!
 
@@ -57,11 +57,11 @@ Thanks for learning about PhenoCam. Now you'll have the chance to access images 
 
 ## Accessing PhenoCam Data
 
-We'll be using the "[phenocamapi" R package](https://github.com/PhenoCamNetwork/phenocamapi) to directly download PhenoCam data. An API is an *application programming interface* (API), which is a way for two or more applications /computers to talk with one another. In this case, it allows us to directly access data from the PhenoCam database.
+We'll be using the "[phenocamapi" R package](https://github.com/PhenoCamNetwork/phenocamapi) to directly download PhenoCam data. An API is an *application programming interface* (API), which is a way for two or more applications/computers to talk with one another. In this case, it allows us to directly access data from the PhenoCam database.
 
-Then, we will choose a site to view some images and download greenness data. Finally, we'll create a gif (short movie) of a site through time.
+Then, you'll choose a site to view some images and download greenness data. Finally, you'll create a gif (short movie) of your site through time.
 
-First, we need to open the required packages. A package is a collection of functions/tools to complete a desired task. For example, you need a certain set of tools to build a birdhouse, but a different set of tools to bake a cake. In this case, the phenocamapi and phenocamr packages have the tools to interact with and download phenocam data. The other packages below assist with visualization and formatting.
+First, we need to open the required packages. A package is a collection of functions/tools to complete a desired task. For example, you need a certain set of tools to build a birdhouse, but a different set of tools to bake a cake. In this case, the "phenocamapi" and "phenocamr" packages have the tools to interact with and download phenocam data. The other packages listed below assist with visualization and formatting.
 
 ```{r}
 library(phenocamapi)
@@ -101,10 +101,6 @@ Vegetation types:
 | UN           | Understory           |
 | WL           | Wetland              |
 
-#list metadata of all sites
-
-sitelist_table \<- get_phenos()
-
 ```{r}
 #list metadata of all sites
 sitelist_table <- get_phenos() 
@@ -127,13 +123,11 @@ head(GR_sites)
 
 #### Create a Map of the PhenoCam Sites
 
-Now we'll make an interactive map to view all the PhenoCam sites colored by their primary vegetation type. First, using our "sitelist_table", we filter out any sites for which a primary vegetation type isn't listed or an "NA" is entered. We'll call this new data table "sitelist_table2".
+Now, we'll create an interactive map to view all the PhenoCam sites colored by their primary vegetation type. First, using our "sitelist_table" that we downloaded above, we filter out any sites for which a primary vegetation type isn't listed or an "NA" is entered. We'll call this new data table "sitelist_table2".
 
 ```{r}
 #Remove sites with NA and empty cells for primary_veg_type
 sitelist_table2 <- sitelist_table[!(is.na(sitelist_table$primary_veg_typ) | sitelist_table$primary_veg_typ==""), ]
-
-
 ```
 
 Then, we'll create a static map of the PhenoCam sites using their latitude and longitude (included in "sitelist_table2"). We'll overlay this onto a basemap of the world and US states.
@@ -162,16 +156,17 @@ Site_map <- ggplot() +
 Site_map
 ```
 
-Then, let's make the map interactive! You can hover over sites to see their details and draw a box around a specific area to zoom into the region.
+Let's make the map interactive! You can hover over sites to see their details, draw a box around a specific area to zoom into the region, and click on various legend entries to toggle them on or off.
 
 ```{r}
 #Map map interactive
 #hover over site to see details, draw box around an area to zoom in
 ggplotly(Site_map)
-
 ```
 
-Now, choose a site to explore, and enter the site name and relevant information in the cell below. For example, I chose the site "lacclair", which represents a deciduous broadleaf ("DB") vegetation type, and I chose to look at data from the year 2022. You'll also need to specify which region of interest (ROI) to use for your site. Recall that some sites have multiple ROIs, each with a unique ID number. You can view the possible ROIs for your site on the [PhenoCam website.](https://phenocam.nau.edu/webcam/)
+#### Download & Plot Canopy Greenness
+
+Now, let's view some PhenoCam images and greenness data. Choose a site to explore, and enter the site name and relevant information in the cell below. For example, I chose the site "lacclair", which represents a deciduous broadleaf ("DB") vegetation type, and I chose to look at data from the year 2022. You'll also need to specify which region of interest (ROI) to use for your site. Recall that some sites have multiple ROIs, each with a unique ID number. You can view the possible ROIs for your site on the [PhenoCam website.](https://phenocam.nau.edu/webcam/)
 
 ```{r}
 #choose site to explore
@@ -188,9 +183,7 @@ ROI = 1000
 
 ```
 
-#### Download & Plot Canopy Greenness
-
-First, we'll download canopy greenness (GCC = green chromatic coordinate) timeseries data. The GCC data are already condensed down to 1-day and 3-day data products (type = '3day' or '1day'). See [Richardson et al. (2018)](https://www.nature.com/articles/sdata201828) for more information about PhenoCam data processing.
+First, we'll download canopy greenness (GCC = green chromatic coordinate) timeseries data for your chosen site. The GCC data are already condensed down to 1-day and 3-day data products (type = '3day' or '1day'). See [Richardson et al. (2018)](https://www.nature.com/articles/sdata201828) for more information about PhenoCam data processing.
 
 ```{r}
 GCC_timeseries <- get_pheno_ts(site = site_name, 
@@ -203,7 +196,7 @@ View(GCC_timeseries)
 colnames(GCC_timeseries)
 ```
 
-Now we'll plot the GCC timeseries to see how canopy greenness changes over time at your chosen site. From the "GCC_timeseries" table, we'll plot the variable called "gcc_90", which corresponds to the 90th percentile of GCC values across the 3-day window within the designated ROI. Using the 90th percentile (rather than the mean) reduces the influence of changing weather and brightness across the images. See [Richardson et al. (2018)](https://www.nature.com/articles/sdata201828) for more details on data products and processing.
+Now, we'll plot the GCC timeseries to see how canopy greenness changes over time at your chosen site. From the "GCC_timeseries" table, we'll plot the variable called "gcc_90", which corresponds to the 90th percentile of GCC values across the 3-day window within the designated ROI. Using the 90th percentile (rather than the mean) reduces the influence of changing weather and brightness across the images. See [Richardson et al. (2018)](https://www.nature.com/articles/sdata201828) for more details on data products and processing.
 
 ```{r}
 #put date into date format
@@ -224,7 +217,7 @@ We can also download and plot the 50% seasonal transition dates (spring green-up
 ```{r}
 
 ##Download csv files of (1) GCC timeseries and (2) transition dates
-#they will save in your designated directory
+#they will save in your designated directory (dir)
 download_phenocam(site = site_name,
                   veg_type = veg,
                   frequency = 3,
@@ -287,10 +280,7 @@ years_spr <- as.numeric(format(td_spring_dates,'%Y'))
 #create table of years and spring trans dates
 trans_table_spring <- data.frame(years_spr, td_spring_DOY)
 
-
-##Plot DOY over time 
-
-#Spring green-up dates
+#Plot spring green-up dates
 plot(trans_table_spring[,1],trans_table_spring[,2], type = "b", col = "darkgreen",
      xlab = 'Year', ylab = 'Spring Transition Date (DOY)')
 
@@ -303,19 +293,19 @@ And now plot the fall brown-down transition dates.
 #extract spring data years
 years_fall <- as.numeric(format(td_fall_dates,'%Y'))
 
-#create table of years and spring trans dates
+#create table of years and fall trans dates
 trans_table_fall <- data.frame(years_fall, td_fall_DOY)
 
-#Fall brown-down dates
+#Plot fall brown-down dates
 plot(trans_table_fall[,1],trans_table_fall[,2], type = "b", col = "brown",
      xlab = 'Year', ylab = 'Fall Transition Date (DOY)')
 ```
 
-As you can see, there is a decent amount of year-to-year variability in when a site greens up (spring) or browns down (fall), directly impacting the total length of the growing sesason. This variability is largely due to differences in weather, such as precipitation and temperature. Climate change is also shifting these seasonal transitions dates, which can impact many other variables, such as plant-animal interactions and ecosystem carbon storage
+As you can see, there is a decent amount of year-to-year variability in when a site greens up (spring) or browns down (fall), directly impacting the total length of the growing sesason. This variability is largely due to differences in weather, such as precipitation and temperature. Climate change is also shifting these seasonal transitions dates, which can impact many other variables, such as plant-animal interactions and ecosystem carbon and water storage.
 
 ### Download PhenoCam Images
 
-Next, we'll download some photos from your chosen site. Images are typically taken every 30 minutes, but for simplicity, we'll just download 1 image per month in order to visualize phenology changes. This code downloads the midday (\~12 pm) image for the 15th day ("days = 15") of each month ("months = 1:12"). The images will appear in the working directory folder you designated above.
+Next, we'll download some photos from your chosen site. Images are typically taken every 30 minutes, but for simplicity, we'll just download 1 image per month in order to visualize phenology changes. This code downloads the midday (\~12 pm) image for the 15th day ("days = 15") of each month ("months = 1:12"). The images will appear in the working directory folder you designated above (dir).
 
 ```{r}
 download_midday_images(site = site_name,
@@ -338,9 +328,6 @@ head(middays_path)
 #determine number of images (should be 12, 1 per month)
 n <- length(middays_path)
 n
-
-
-
 ```
 
 Then we'll create the layout.
@@ -395,6 +382,6 @@ As an example, here's the gif I made for the lacclair site. Your gif will be sav
 
 #### Thank you!
 
-If you'd like, now try this exercise with another PhenoCam site. Be sure to either clear your working directory folder (delete the downloaded photos) or designate a new folder directory before trying a new site.
+If you'd like, now try this exercise with another PhenoCam site. Be sure to either clear your working directory folder (delete the downloaded photos/files) or designate a new folder directory before trying a new site.
 
-Thanks for exploring PhenoCam data. Hopefully, you have a new-found excitement for phenology!
+Thanks for exploring PhenoCam data. Hopefully, you have a new-found appreciation for phenology!
