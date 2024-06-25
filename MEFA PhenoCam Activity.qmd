@@ -15,7 +15,7 @@ Some code adapted from the [2020 NEON Tutorial](https://www.neonscience.org/reso
 
 Established in 2008, the [PhenoCam Network](https://phenocam.nau.edu/webcam/) is a collection of \>700 digital cameras that take regular (\~ every 30 min) pictures of ecosystem canopies around the world. The name PhenoCam comes from the combination of the words "phenology" and "camera", because the images are an easy and effective way to study the phenology, or the timing of seasonal changes, of vegetation across diverse ecosystems. The images are available in near-real time to view on the [PhenoCam website](https://phenocam.nau.edu/webcam/), and can also be downloaded through the ["phenocamapi" R package](https://github.com/PhenoCamNetwork/phenocamapi), which we'll cover in this tutorial. There are currently over 60 million images available!
 
-![PhenoCam locations across North America (screenshot from phenocam.nau.edu).](PhenoCam_SiteMap.png){fig-align="center" width="600"}
+![PhenoCam locations across North America (screenshot from phenocam.nau.edu).](images/PhenoCam_SiteMap.png){fig-align="center" width="600"}
 
 ![Illustration of a PhenoCam (red circle) over a tree canopy collecting phenology data (Image from [Richardson 2019](https://nph.onlinelibrary.wiley.com/doi/full/10.1111/nph.15591), illustrator: Victor Leshyk).](PhenoCam_illustration_2.png){fig-align="center" width="350"}
 
