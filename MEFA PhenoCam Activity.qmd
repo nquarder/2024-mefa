@@ -79,7 +79,9 @@ library(plotly)
 Next, indicate a location on your computer where you want the PhenoCam images to save. Edit the cell below to point to your computer's location. Make sure to use forward slashes (if using Windows, you'll have to switch from backslashes to forward slashes).
 
 ```{r}
-dir = "C:/Users/alison/Desktop/test_images"
+dir = file.path('.', 'test_images')# "C:/Users/alison/Desktop/test_images"
+dir.create(dir)
+dir
 ```
 
 First, we'll download a table to see all the available PhenoCam sites and associated metadata. For example, each entry lists a site's geographic coordinates, date of first and last image, primary vegetation type (see table below for abbreviations), and mean annual temperature and precipitation, among other things.
