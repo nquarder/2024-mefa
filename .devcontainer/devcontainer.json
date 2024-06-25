@@ -5,7 +5,7 @@
         "terminal.integrated.shell.linux": "/bin/bash"
     },
     "extensions": [
-        "ms-vscode.vscode-r",
+        "REditorSupport.r",
         "quarto.quarto"
     ],
     "postCreateCommand": "git pull",
