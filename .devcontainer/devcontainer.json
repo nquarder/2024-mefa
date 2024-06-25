@@ -4,7 +4,10 @@
     "settings": {
         "terminal.integrated.shell.linux": "/bin/bash"
     },
-    "extensions": ["R", "Quarto"],
+    "extensions": [
+        "ms-vscode.vscode-r",
+        "quarto.quarto"
+    ],
     "postCreateCommand": "git pull",
     "forwardPorts": [8787],
     "remoteUser": "rstudio"
