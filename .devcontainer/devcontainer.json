@@ -1,0 +1,14 @@
+{
+    "name": "RStudio Environment",
+    "build": {
+      "context": "..",
+      "dockerfile": ".devcontainer/Dockerfile"
+    },
+    "settings": {
+      "terminal.integrated.shell.linux": "/bin/bash"
+    },
+    "extensions": [],
+    "postCreateCommand": "R -e 'install.packages(c(\"languageserver\"), repos=\"http://cran.rstudio.com/\")'",
+    "forwardPorts": [8787],
+    "remoteUser": "mefa"
+  }
