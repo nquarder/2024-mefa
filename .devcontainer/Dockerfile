@@ -15,6 +15,3 @@ ENV USER=mefa
 RUN useradd -m ${USER} && \
     echo "${USER}:${PASSWORD}" | chpasswd && \
     adduser ${USER} sudo
-
-COPY . /home/${USER}
-RUN rm -rf .git .devcontainer
