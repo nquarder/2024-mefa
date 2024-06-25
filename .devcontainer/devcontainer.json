@@ -4,8 +4,8 @@
     "settings": {
         "terminal.integrated.shell.linux": "/bin/bash"
     },
-    "extensions": [],
-    "postCreateCommand": "git pull && R -e 'install.packages(c(\"languageserver\"), repos=\"http://cran.rstudio.com/\")'",
+    "extensions": ["R", "Quarto"],
+    "postCreateCommand": "git pull",
     "forwardPorts": [8787],
-    "remoteUser": "mefa"
+    "remoteUser": "rstudio"
   }
