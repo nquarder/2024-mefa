@@ -1,6 +1,8 @@
 FROM rocker/rstudio:latest
 
-RUN R -e "install.packages(c('devtools', 'languageserver', 'jpeg', 'purrr', 'magick', 'lubridate', 'ggplot2', 'pals', 'maps', 'plotly'), repos='http://cran.rstudio.com/')"
+RUN sudo apt-get update && sudo apt-get install -y libmagick++-dev
+
+RUN R -e "install.packages(c('devtools', 'languageserver', 'jpeg', 'purrr', 'magick', 'lubridate', 'ggplot2', 'pals', 'maps', 'plotly'))"
 
 RUN R -e "install.packages('phenocamr')"
 
