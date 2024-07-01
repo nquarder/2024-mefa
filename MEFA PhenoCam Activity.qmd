@@ -76,7 +76,9 @@ library(maps)
 library(plotly)
 ```
 
-Next, indicate a location (file path) where you want the PhenoCam images to save. For this workshop, we'll create a new file within GitHub Codespaces called "pheno_images". In the future, if you're using R Studio locally on your computer (instead of via Codespaces), you can enter a local directory for your computer instead (e.g., "C:/Users/alison/Desktop/pheno_images"). Make sure to use forward slashes (if using Windows, you'll have to switch from the default backslashes to forward slashes).
+Next, indicate a location (file path) where you want the PhenoCam images to save. For this workshop, we'll create a new file within GitHub Codespaces called "pheno_images". 
+
+*In the future, if you're using R Studio locally on your computer, you can enter a local directory for your computer instead (e.g., "C:/Users/alison/Desktop/pheno_images"). Make sure to use forward slashes (if using Windows, you'll have to switch from the default backslashes to forward slashes).*
 
 ```{r}
 # Designate directory (file path)
@@ -166,7 +168,6 @@ Let's make the map interactive! You can hover over sites to see their details, d
 
 ```{r}
 # Make map interactive
-# Hover over site to see details, draw box around an area to zoom in
 ggplotly(Site_map)
 ```
 
@@ -186,7 +187,6 @@ year = 2022
 
 # Indicate ROI ID
 ROI = 1000
-
 ```
 
 First, we'll download canopy greenness (GCC = green chromatic coordinate) timeseries data for your chosen site. The GCC data are already condensed down to 1-day and 3-day data products (type = '3day' or '1day'). See [Richardson et al. (2018)](https://www.nature.com/articles/sdata201828) for more information about PhenoCam data processing.
@@ -210,11 +210,10 @@ Now, we'll plot the GCC timeseries to see how canopy greenness changes over time
 GCC_timeseries[,date:=as.Date(date)]
 
 # Create line plot
-GCC_timeseries[,plot(date, gcc_90, col = 'darkgreen', type = 'b', xlab = 'Date', ylab = 'GCC')]
-
-# Add title
-mtext('Canopy Greenness Timeseries', cex = 1.8, font = 2, line = 1)
-
+plot(GCC_timeseries$date, GCC_timeseries$gcc_90, 
+col = "darkgreen", type = "b", 
+xlab = 'Date', ylab = 'GCC', 
+main = 'Canopy Greenness Timeseries')
 ```
 
 #### Explore Seasonal Transition Dates
@@ -231,18 +230,20 @@ download_phenocam(site = site_name,
                   phenophase = TRUE,
                   out_dir = dir)
 
-# Read in the transition date csv file
+# Read in the transition date csv file:
+
+# Designate file location
 trans_dates_path <- paste0(dir, "/", site_name, "_", veg, "_", ROI, "_3day_transition_dates.csv")
+
+#Read in file
 trans_dates <- read.table(trans_dates_path,
                  header = TRUE,
                  sep = ",")
-
 ```
 
 Now we'll plot the transition dates on the GCC timeseries.
 
 ```{r}
-
 # Pull out transition dates from the trans_dates table
 
 # Select the rising (spring dates) for 50% threshold of Gcc 90
@@ -252,12 +253,14 @@ td_rise <- trans_dates[trans_dates$direction == "rising" & trans_dates$gcc_value
 td_fall <- trans_dates[trans_dates$direction == "falling" & trans_dates$gcc_value == "gcc_90",]
 
 
-# As above, create a simple line graph of the Green Chromatic Coordinate (Gcc)
+# As above, create a simple line graph of the Green Chromatic Coordinate (GCC)
 # This time we use "type = 1" to create a smooth line graph
-GCC_timeseries[,plot(date, gcc_90, col = "black", type = "l", xlab = 'Date', ylab = 'GCC')]
+plot(GCC_timeseries$date, GCC_timeseries$gcc_90, 
+     col = "black", type = "l", cex = 1.8,
+     xlab = 'Date', ylab = 'GCC', main = 'Seasonal Transition Dates')
 
 
-# Add points to show transition dates
+# Add points to show transition dates:
 
 # Spring green-up
 points(x = as.Date(td_rise$transition_50, origin = "1970-01-01"),
@@ -270,10 +273,6 @@ points(x = as.Date(td_fall$transition_50, origin = "1970-01-01"),
        y = td_fall$threshold_50,
        pch = 19,
        col = "brown")
-
-# Add title to plot
-mtext('Seasonal Transition Dates', cex = 1.8, font = 2, line = 1)
-
 ```
 
 Now, let's explore the variability of seasonal transition dates throughout the available data years. This works best if you chose a site with a longer timeseries. We'll first convert the transitions dates into a "day-of-year" (DOY) format (e.g., Jan 1 = DOY 1, Jan 2 = DOY 2, etc.), and then plot those by year.
@@ -295,9 +294,10 @@ years_spr <- as.numeric(format(td_spring_dates,'%Y'))
 trans_table_spring <- data.frame(years_spr, td_spring_DOY)
 
 # Plot spring green-up dates
-plot(trans_table_spring[,1],trans_table_spring[,2], type = "b", col = "darkgreen",
-     xlab = 'Year', ylab = 'Spring Transition Date (DOY)')
-
+plot(trans_table_spring[,1],trans_table_spring[,2], 
+    type = "b", col = "darkgreen",
+    xlab = 'Year', ylab = 'Spring Transition Date (DOY)',
+    main = 'Date of Spring Onset Through the Years')
 ```
 
 And now plot the fall brown-down transition dates.
@@ -311,8 +311,10 @@ years_fall <- as.numeric(format(td_fall_dates,'%Y'))
 trans_table_fall <- data.frame(years_fall, td_fall_DOY)
 
 # Plot fall brown-down dates
-plot(trans_table_fall[,1],trans_table_fall[,2], type = "b", col = "brown",
-     xlab = 'Year', ylab = 'Fall Transition Date (DOY)')
+plot(trans_table_fall[,1],trans_table_fall[,2], 
+     type = "b", col = "brown",
+     xlab = 'Year', ylab = 'Fall Transition Date (DOY)',
+     main = 'Date of Autumn Onset Through the Years')
 ```
 
 As you can see, there is a decent amount of year-to-year variability in when a site greens up (spring) or browns down (fall), directly impacting the total length of the growing sesason. This variability is largely due to differences in weather, such as precipitation and temperature. Climate change is also shifting seasonal transitions dates, which can impact many other variables, such as plant-animal interactions and ecosystem carbon and water storage.
@@ -374,7 +376,7 @@ gif <- list.files(path = dir, pattern = "*.jpg", full.names = T) %>%
   
   image_join() %>% 
   
-  #add text to each image -  you can change the size, location, color below
+  # Add text to each image -  you can change the size, location, color below
   image_annotate(paste(site_name,"Jan-Dec", year), 
                  location = "+900+30", 
                  size = 35, 
@@ -393,7 +395,7 @@ dir
 
 As an example, here's the gif I made for the lacclair site. Your gif will be saved to the working directory you indicated at the beginning (called "dir").
 
-<img src="images/MonthlyGreenness_gif.gif" align="left" width="750"/>
+<img src="images/MonthlyGreenness_gif.gif" align="left" width="750"/>/
 
 #### Thank you!
 
