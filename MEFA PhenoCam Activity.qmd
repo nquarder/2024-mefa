@@ -76,11 +76,16 @@ library(maps)
 library(plotly)
 ```
 
-Next, indicate a location on your computer where you want the PhenoCam images to save. Edit the cell below to point to your computer's location. Make sure to use forward slashes (if using Windows, you'll have to switch from backslashes to forward slashes).
+Next, indicate a location (file path) where you want the PhenoCam images to save. For this workshop, we'll create a new file within GitHub Codespaces called "pheno_images". In the future, if you're using R Studio locally on your computer (instead of via Codespaces), you can enter a local directory for your computer instead (e.g., "C:/Users/alison/Desktop/pheno_images"). Make sure to use forward slashes (if using Windows, you'll have to switch from the default backslashes to forward slashes).
 
 ```{r}
-dir = file.path('.', 'test_images')# "C:/Users/alison/Desktop/test_images"
+# Designate directory (file path)
+dir = file.path('.', 'pheno_images')
+
+# Create test_images folder
 dir.create(dir)
+
+# View directory
 dir
 ```
 
@@ -104,10 +109,10 @@ Vegetation types:
 | WL           | Wetland              |
 
 ```{r}
-#list metadata of all sites
+# List metadata of all sites
 sitelist_table <- get_phenos() 
 
-#View table and available metadata (column names)
+# View table and available metadata (column names)
 View(sitelist_table)
 colnames(sitelist_table)
 ```
@@ -115,10 +120,10 @@ colnames(sitelist_table)
 You can filter the table by any of the available attributes (column names). For example, I created a subset of only grasslands (GR) sites below.
 
 ```{r}
-#Create a subset of only grassland sites 
+# Create a subset of only grassland sites 
 GR_sites <- subset(sitelist_table, primary_veg_type == "GR")  
 
-#View the first few grassland entries and entire table
+# View the first few grassland entries and entire table
 View(GR_sites)
 head(GR_sites) 
 ```
@@ -128,18 +133,18 @@ head(GR_sites)
 Now, we'll create an interactive map to view all the PhenoCam sites colored by their primary vegetation type. First, using our "sitelist_table" that we downloaded above, we filter out any sites for which a primary vegetation type isn't listed or an "NA" is entered. We'll call this new data table "sitelist_table2".
 
 ```{r}
-#Remove sites with NA and empty cells for primary_veg_type
+# Remove sites with NA and empty cells for primary_veg_type
 sitelist_table2 <- sitelist_table[!(is.na(sitelist_table$primary_veg_typ) | sitelist_table$primary_veg_typ==""), ]
 ```
 
 Then, we'll create a static map of the PhenoCam sites using their latitude and longitude (included in "sitelist_table2"). We'll overlay this onto a basemap of the world and US states.
 
 ```{r}
-#download basemaps of the world and US states
+# Download basemaps of the world and US states
 world_map <- map_data("world")
 state_map <- map_data("state")
 
-#Map of sites
+# Create map of sites
 Site_map <- ggplot() +
   geom_polygon(data = world_map, aes(x = long, y = lat, group = group), # world map
                fill = "white", color = "black") +
@@ -154,15 +159,15 @@ Site_map <- ggplot() +
   theme_minimal()+
   theme(plot.title = element_text(hjust = 0.5, size = 20)) #center title and increase font size
   
-#View map
+# View map
 Site_map
 ```
 
 Let's make the map interactive! You can hover over sites to see their details, draw a box around a specific area to zoom into the region, and click on various legend entries to toggle them on or off.
 
 ```{r}
-#Map map interactive
-#hover over site to see details, draw box around an area to zoom in
+# Make map interactive
+# Hover over site to see details, draw box around an area to zoom in
 ggplotly(Site_map)
 ```
 
@@ -171,16 +176,16 @@ ggplotly(Site_map)
 Now, let's view some PhenoCam images and greenness data. Choose a site to explore, and enter the site name and relevant information in the cell below. For example, I chose the site "lacclair", which represents a deciduous broadleaf ("DB") vegetation type, and I chose to look at data from the year 2022. You'll also need to specify which region of interest (ROI) to use for your site. Recall that some sites have multiple ROIs, each with a unique ID number. You can view the possible ROIs for your site on the [PhenoCam website.](https://phenocam.nau.edu/webcam/)
 
 ```{r}
-#choose site to explore
+# Choose site to explore
 site_name = "lacclair"
 
-#indicate vegetation type (listed on site page)
+# Indicate vegetation type (listed on site page)
 veg = "DB"
 
-#choose data year
+# Choose data year
 year = 2022
 
-#Indicate ROI ID
+# Indicate ROI ID
 ROI = 1000
 
 ```
@@ -188,12 +193,13 @@ ROI = 1000
 First, we'll download canopy greenness (GCC = green chromatic coordinate) timeseries data for your chosen site. The GCC data are already condensed down to 1-day and 3-day data products (type = '3day' or '1day'). See [Richardson et al. (2018)](https://www.nature.com/articles/sdata201828) for more information about PhenoCam data processing.
 
 ```{r}
+# Download GCC timeseries
 GCC_timeseries <- get_pheno_ts(site = site_name, 
                                vegType = veg, 
                                roiID = ROI, 
                                type = '3day')
 
-#View table and available data (column names)
+# View table and available data (column names)
 View(GCC_timeseries) 
 colnames(GCC_timeseries)
 ```
@@ -201,13 +207,13 @@ colnames(GCC_timeseries)
 Now, we'll plot the GCC timeseries to see how canopy greenness changes over time at your chosen site. From the "GCC_timeseries" table, we'll plot the variable called "gcc_90", which corresponds to the 90th percentile of GCC values across the 3-day window within the designated ROI. Using the 90th percentile (rather than the mean) reduces the influence of changing weather and brightness across the images. See [Richardson et al. (2018)](https://www.nature.com/articles/sdata201828) for more details on data products and processing.
 
 ```{r}
-#put date into date format
+# Put date into date format
 GCC_timeseries[,date:=as.Date(date)]
 
-#create line plot
+# Create line plot
 GCC_timeseries[,plot(date, gcc_90, col = 'darkgreen', type = 'b', xlab = 'Date', ylab = 'GCC')]
 
-#add title
+# Add title
 mtext('Canopy Greenness Timeseries', cex = 1.8, font = 2, line = 1)
 
 ```
@@ -218,49 +224,49 @@ We can also download and plot the 50% seasonal transition dates (spring green-up
 
 ```{r}
 
-##Download csv files of (1) GCC timeseries and (2) transition dates
-#they will save in your designated directory (dir)
+# Download csv files of (1) GCC timeseries and (2) transition dates
+# They will save in your designated directory (dir)
 download_phenocam(site = site_name,
                   veg_type = veg,
                   frequency = 3,
                   phenophase = TRUE,
                   out_dir = dir)
 
-##Read in the transition date csv file
+# Read in the transition date csv file
 trans_dates_path <- paste0(dir, "/", site_name, "_", veg, "_", ROI, "_3day_transition_dates.csv")
 trans_dates <- read.table(trans_dates_path),
                  header = TRUE,
                  sep = ",")
 
-##Pull out transition dates from the trans_dates table
+# Pull out transition dates from the trans_dates table
 
-# select the rising (spring dates) for 50% threshold of Gcc 90
+# Select the rising (spring dates) for 50% threshold of Gcc 90
 td_rise <- trans_dates[trans_dates$direction == "rising" & trans_dates$gcc_value == "gcc_90",]
 
-# select the falling (fall dates) for 50% threshold of Gcc 90
+# Select the falling (fall dates) for 50% threshold of Gcc 90
 td_fall <- trans_dates[trans_dates$direction == "falling" & trans_dates$gcc_value == "gcc_90",]
 
 
-##As above, create a simple line graph of the Green Chromatic Coordinate (Gcc)
-#This time we use "type = 1" to create a smooth line graph
+# As above, create a simple line graph of the Green Chromatic Coordinate (Gcc)
+# This time we use "type = 1" to create a smooth line graph
 GCC_timeseries[,plot(date, gcc_90, col = "black", type = "l", xlab = 'Date', ylab = 'GCC')]
 
 
-##Add points to show transition dates
+# Add points to show transition dates
 
-#Spring green-up
+# Spring green-up
 points(x = as.Date(td_rise$transition_50, origin = "1970-01-01"),
        y = td_rise$threshold_50,
        pch = 19,
        col = "green")
 
-#Fall brown-down
+# Fall brown-down
 points(x = as.Date(td_fall$transition_50, origin = "1970-01-01"),
        y = td_fall$threshold_50,
        pch = 19,
        col = "brown")
 
-##Add title
+# Add title to plot
 mtext('Seasonal Transition Dates', cex = 1.8, font = 2, line = 1)
 
 ```
@@ -269,21 +275,21 @@ Now, let's explore the variability of seasonal transition dates throughout the a
 
 ```{r}
 
-#convert green-up dates to date format and then DOY
+# Convert green-up dates to date format and then DOY
 td_spring_dates <- as.Date(td_rise$transition_50,format='%Y-%m-%d')
 td_spring_DOY <- lubridate::yday(td_spring_dates)
 
-#convert brown-down dates to date format and then DOY
+# Convert brown-down dates to date format and then DOY
 td_fall_dates <- as.Date(td_fall$transition_50,format='%Y-%m-%d')
 td_fall_DOY <- lubridate::yday(td_fall_dates)
 
-#extract spring data years
+# Extract spring data years
 years_spr <- as.numeric(format(td_spring_dates,'%Y'))
 
-#create table of years and spring trans dates
+# Create table of years and spring trans dates
 trans_table_spring <- data.frame(years_spr, td_spring_DOY)
 
-#Plot spring green-up dates
+# Plot spring green-up dates
 plot(trans_table_spring[,1],trans_table_spring[,2], type = "b", col = "darkgreen",
      xlab = 'Year', ylab = 'Spring Transition Date (DOY)')
 
@@ -293,24 +299,25 @@ And now plot the fall brown-down transition dates.
 
 ```{r}
 
-#extract spring data years
+# Extract spring data years
 years_fall <- as.numeric(format(td_fall_dates,'%Y'))
 
-#create table of years and fall trans dates
+# Create table of years and fall trans dates
 trans_table_fall <- data.frame(years_fall, td_fall_DOY)
 
-#Plot fall brown-down dates
+# Plot fall brown-down dates
 plot(trans_table_fall[,1],trans_table_fall[,2], type = "b", col = "brown",
      xlab = 'Year', ylab = 'Fall Transition Date (DOY)')
 ```
 
-As you can see, there is a decent amount of year-to-year variability in when a site greens up (spring) or browns down (fall), directly impacting the total length of the growing sesason. This variability is largely due to differences in weather, such as precipitation and temperature. Climate change is also shifting these seasonal transitions dates, which can impact many other variables, such as plant-animal interactions and ecosystem carbon and water storage.
+As you can see, there is a decent amount of year-to-year variability in when a site greens up (spring) or browns down (fall), directly impacting the total length of the growing sesason. This variability is largely due to differences in weather, such as precipitation and temperature. Climate change is also shifting seasonal transitions dates, which can impact many other variables, such as plant-animal interactions and ecosystem carbon and water storage.
 
 ### Download PhenoCam Images
 
 Next, we'll download some photos from your chosen site. Images are typically taken every 30 minutes, but for simplicity, we'll just download 1 image per month in order to visualize phenology changes. This code downloads the midday (\~12 pm) image for the 15th day ("days = 15") of each month ("months = 1:12"). The images will appear in the working directory folder you designated above (dir).
 
 ```{r}
+# Download PhenoCam images
 download_midday_images(site = site_name,
                        y = year, 
                        months = 1:12, 
@@ -321,14 +328,14 @@ download_midday_images(site = site_name,
 Now, we'll use those images to create a photo collage that displays changes in phenology throughout the year. First we'll set it up.
 
 ```{r}
-#isolate images from your designated directory
-#pics are jpeg format
+# Isolate images from your designated directory
+# Pics are jpeg format
 middays_path <- dir(dir, pattern = "*.jpg", full.names = TRUE)
 
-#See a sample of image directory paths to make sure it worked
+# See a sample of image directory paths to make sure it worked
 head(middays_path)
 
-#determine number of images (should be 12, 1 per month)
+# Determine number of images (should be 12, 1 per month)
 n <- length(middays_path)
 n
 ```
@@ -336,10 +343,10 @@ n
 Then we'll create the layout.
 
 ```{r}
-#Set up image layout (4 rows & 3 columns)
+# Set up image layout (4 rows & 3 columns)
 par(mar= c(0,0,0,0), mfrow=c(4,3), oma=c(0,0,3,0))
 
-#Create monthly image layout with labels (this can take 1-2 min)
+# Create monthly image layout with labels (this can take 1-2 min)
 for(i in 1:n){
   img <- jpeg::readJPEG(middays_path[i])
   plot(0:1,0:1, type='n', axes= FALSE, xlab= '', ylab = '')
@@ -347,7 +354,7 @@ for(i in 1:n){
   mtext(month.name[i], line = -2)
 }
 
-#add title (feel free to edit the title below)
+# Add title (feel free to edit the title below)
 mtext('Canopy Greenness Through the Months', font = 2, cex = 1.8, outer = TRUE)
 ```
 
@@ -355,7 +362,7 @@ Finally, we'll use those same images to create a gif that shows changes in pheno
 
 ```{r}
 
-#make timelapse gif of images
+# Make timelapse gif of images
 gif <- list.files(path = dir, pattern = "*.jpg", full.names = T) %>% 
 
   purrr::map(image_read) %>% 
@@ -368,20 +375,20 @@ gif <- list.files(path = dir, pattern = "*.jpg", full.names = T) %>%
                  size = 35, 
                  color = "black") %>%
   
-  #frames per second (higher number = faster, lower number = slower)
+  # Frames per second (higher number = faster, lower number = slower)
   image_animate(fps=0.5) %>%
   
-  #file name
+  # Designate file name & save to your directory
   image_write(paste0(dir,"/MonthlyGreenness_gif.gif")) 
 
-#the gif will be saved to the working directory you indicated at the beginning.
-#You can check the directory path below
+# The gif will be saved to the directory you indicated at the beginning (dir)
+# You can check the directory path below
 dir
 ```
 
 As an example, here's the gif I made for the lacclair site. Your gif will be saved to the working directory you indicated at the beginning (called "dir").
 
-<img src="MonthlyGreenness_gif.gif" align="left" width="750"/>
+<img src="images/MonthlyGreenness_gif.gif" align="left" width="750"/>
 
 #### Thank you!
 
