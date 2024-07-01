@@ -17,39 +17,39 @@ Established in 2008, the [PhenoCam Network](https://phenocam.nau.edu/webcam/) is
 
 ![PhenoCam locations across North America (screenshot from phenocam.nau.edu).](images/PhenoCam_SiteMap.png){fig-align="center" width="600"}
 
-![Illustration of a PhenoCam (red circle) over a tree canopy collecting phenology data (Image from [Richardson 2019](https://nph.onlinelibrary.wiley.com/doi/full/10.1111/nph.15591), illustrator: Victor Leshyk).](PhenoCam_illustration_2.png){fig-align="center" width="350"}
+![Illustration of a PhenoCam (red circle) over a tree canopy collecting phenology data (Image from [Richardson 2019](https://nph.onlinelibrary.wiley.com/doi/full/10.1111/nph.15591), illustrator: Victor Leshyk).](images/PhenoCam_illustration_2.png){fig-align="center" width="350"}
 
 #### Quantifying Greenness
 
 Beyond being pretty pictures, PhenoCam images also provide a quantitative way to track vegetation phenology by measuring the intensity of canopy greenness. Digital images are stored as three different color channels - red, green, and blue (RGB) - which are the primary colors for light, and combine in different ratios to create all the visible colors in a photograph. Old-style TVs use this same method, as does your smartphone.
 
-![The primary colors of light combine to create all visible colors in digital images.](RGB_colors.png){fig-align="center" width="250"}
+![The primary colors of light combine to create all visible colors in digital images.](images/RGB_colors.png){fig-align="center" width="250"}
 
 Each digital pixel has a numerical value for each color channel (RGB) that represents its intensity. We can use these values to quantify the relative intensity of green compared to the overall brightness of the image. We call this the Green Chromatic Coordinate (GCC) and calculate it using the equation below.
 
-![Equation to calculate the relative greenness (GCC) of a digital image.](GCC_equation.png){fig-align="center" width="250"}
+![Equation to calculate the relative greenness (GCC) of a digital image.](images/GCC_equation.png){fig-align="center" width="250"}
 
 However, since PhenoCam images usually capture other things besides just the vegetation canopy (e.g., sky, ground, roads, buildings), each site has established portions of the image, or regions of interest (ROIs), that are analyzed for greenness. For example, at this forested site in Canada (lacclair), only the trees in the foreground are included in the GCC calculation:
 
-![Example of an ROI (unshaded portion) for a forest site.](lacclair_ROI.png){fig-align="center" width="350"}
+![Example of an ROI (unshaded portion) for a forest site.](images/lacclair_ROI.png){fig-align="center" width="350"}
 
 And at this shrub site, only the shrub plants are included in the ROI and bare ground is excluded.
 
-![ROI (unshaded portion) for a shrub site- bare ground is excluded.](shrub_ROI.png){fig-align="center" width="350"}
+![ROI (unshaded portion) for a shrub site- bare ground is excluded.](images/shrub_ROI.png){fig-align="center" width="350"}
 
 When GCC is calculated over a long time period at a site, a timeseries of vegetation greenness can be created. Below is the GCC timeseries for the laccair forest site shown above over the past 9 years. Notice the clear seasonal cycle of vegetation green-up in the spring followed by leaf color change and senescence (brown-down/death) in autumn.
 
-![Timeseries of canopy greeness (GCC) at a forest site in Canada (lacclair).](lacclair_GCC.png){fig-align="center" width="1800"}
+![Timeseries of canopy greeness (GCC) at a forest site in Canada (lacclair).](images/lacclair_GCC.png){fig-align="center" width="1800"}
 
 #### Seasonal Transition Dates
 
 These GCC timeseries can be used to extract seasonal transition dates across the years. For example, to determine the timing of spring green-up, we can use the amplitude (height) of each annual peak to determine when (what day of the year) vegetation at the site has reached either 10%, 25%, or 50% of it's maximum greenness. We consider this to be the start of spring green-up. We use a similar method to extract the start of autumn brown-down.
 
-![The dates of spring green-up (green symbols) and autumn brown-down (brown symbols) can be extracted from the GCC timeseries.](transition%20dates.png){fig-align="center" width="400"}
+![The dates of spring green-up (green symbols) and autumn brown-down (brown symbols) can be extracted from the GCC timeseries.](images/transition%20dates.png){fig-align="center" width="400"}
 
 Over a long time period, the timing of seasonal transition dates can be used to track shifts in vegetation phenology, such as with climate change. This dataset can also be used to understand what environmental and biologic factors (e.g., temperature, rainfall, sunlight) influence the timing of spring leaf-out and autumn color changes.
 
-![Seasonal transition dates at a deciduous forest site in Canada (lacclair) over the past 9 years.](transition%20dates_timeseries.png){fig-align="center"}
+![Seasonal transition dates at a deciduous forest site in Canada (lacclair) over the past 9 years.](images/transition%20dates_timeseries.png){fig-align="center"}
 
 #### Your turn!
 
@@ -227,7 +227,8 @@ download_phenocam(site = site_name,
                   out_dir = dir)
 
 ##Read in the transition date csv file
-trans_dates <- read.table(paste0(dir, "/", site_name, "_", veg, "_", ROI, "_3day_transition_dates.csv"),
+trans_dates_path <- paste0(dir, "/", site_name, "_", veg, "_", ROI, "_3day_transition_dates.csv")
+trans_dates <- read.table(trans_dates_path),
                  header = TRUE,
                  sep = ",")
 
