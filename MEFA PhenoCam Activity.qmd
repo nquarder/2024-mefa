@@ -234,7 +234,7 @@ download_phenocam(site = site_name,
 
 # Read in the transition date csv file
 trans_dates_path <- paste0(dir, "/", site_name, "_", veg, "_", ROI, "_3day_transition_dates.csv")
-trans_dates <- read.table(trans_dates_path),
+trans_dates <- read.table(trans_dates_path,
                  header = TRUE,
                  sep = ",")
 
