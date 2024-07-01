@@ -125,7 +125,6 @@ GR_sites <- subset(sitelist_table, primary_veg_type == "GR")
 
 # View the first few grassland entries and entire table
 View(GR_sites)
-head(GR_sites) 
 ```
 
 #### Create a Map of the PhenoCam Sites
