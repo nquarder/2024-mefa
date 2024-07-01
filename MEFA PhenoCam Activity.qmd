@@ -258,9 +258,6 @@ td_fall <- trans_dates[trans_dates$direction == "falling" & trans_dates$gcc_valu
 
 # As above, create a simple line graph of the Green Chromatic Coordinate (GCC)
 
-#Adjust plot area margins
-#par(mar=c(5, 6, 4, 2))
-
 # Plot- this time we use "type = 1" to create a smooth line graph
 plot(GCC_timeseries$date, GCC_timeseries$gcc_90, 
      col = "black", type = "l",
@@ -312,8 +309,7 @@ plot(trans_table_spring[,1],trans_table_spring[,2],
 And now plot the fall brown-down transition dates.
 
 ```{r}
-
-# Extract spring data years
+# Extract fall data years
 years_fall <- as.numeric(format(td_fall_dates,'%Y'))
 
 # Create table of years and fall trans dates
@@ -408,6 +404,10 @@ As an example, here's the gif I made for the lacclair site. Your gif will be sav
 
 #### Thank you!
 
-If you'd like, now try this exercise with another PhenoCam site. Be sure to either clear your working directory folder (delete the downloaded photos/files) or designate a new folder directory before trying a new site.
+If you'd like, now try this exercise with another PhenoCam site. Be sure to either clear your working directory folder (delete the downloaded photos/files) or create/designate a new folder directory before trying a new site. And run this command to re-set your plotting parameters:
+
+```{r}
+dev.off()
+```
 
 Thanks for exploring PhenoCam data. Hopefully, you have a new-found appreciation for phenology!
