@@ -396,8 +396,6 @@ As an example, here's the gif I made for the lacclair site. Your gif will be sav
 
 <img src="images/MonthlyGreenness_gif.gif" align="left" width="750"/>
 
-<br>
-
 #### Thank you!
 
 If you'd like, now try this exercise with another PhenoCam site. Be sure to either clear your working directory folder (delete the downloaded photos/files) or designate a new folder directory before trying a new site.
