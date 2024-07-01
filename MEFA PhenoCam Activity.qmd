@@ -209,9 +209,8 @@ Now, we'll plot the GCC timeseries to see how canopy greenness changes over time
 # Put date into date format
 GCC_timeseries[,date:=as.Date(date)]
 
-#Adjust plot area
-par(mar=c(5, 5, 4, 2))
-par(oma = c(20, 0, 20, 0))
+#Adjust plot area margins
+par(mar=c(5, 6, 4, 2))
 
 # Create line plot
 plot(GCC_timeseries$date, GCC_timeseries$gcc_90, 
@@ -226,7 +225,6 @@ plot(GCC_timeseries$date, GCC_timeseries$gcc_90,
 We can also download and plot the 50% seasonal transition dates (spring green-up and fall brown-down) for your site. We'll use another package called "[phenocamr"](https://github.com/bluegreen-labs/phenocamr/tree/master) to download the transition dates.
 
 ```{r}
-
 # Download csv files of (1) GCC timeseries and (2) transition dates
 # They will save in your designated directory (dir)
 download_phenocam(site = site_name,
@@ -259,10 +257,16 @@ td_fall <- trans_dates[trans_dates$direction == "falling" & trans_dates$gcc_valu
 
 
 # As above, create a simple line graph of the Green Chromatic Coordinate (GCC)
-# This time we use "type = 1" to create a smooth line graph
+
+#Adjust plot area margins
+#par(mar=c(5, 6, 4, 2))
+
+# Plot- this time we use "type = 1" to create a smooth line graph
 plot(GCC_timeseries$date, GCC_timeseries$gcc_90, 
-     col = "black", type = "l", cex = 1.8,
-     xlab = 'Date', ylab = 'GCC', main = 'Seasonal Transition Dates')
+     col = "black", type = "l",
+     cex = 2, cex.lab = 2, cex.axis = 2, cex.main = 3,
+     xlab = 'Date', ylab = 'GCC', 
+     main = 'Seasonal Transition Dates')
 
 
 # Add points to show transition dates:
@@ -283,7 +287,6 @@ points(x = as.Date(td_fall$transition_50, origin = "1970-01-01"),
 Now, let's explore the variability of seasonal transition dates throughout the available data years. This works best if you chose a site with a longer timeseries. We'll first convert the transitions dates into a "day-of-year" (DOY) format (e.g., Jan 1 = DOY 1, Jan 2 = DOY 2, etc.), and then plot those by year.
 
 ```{r}
-
 # Convert green-up dates to date format and then DOY
 td_spring_dates <- as.Date(td_rise$transition_50,format='%Y-%m-%d')
 td_spring_DOY <- lubridate::yday(td_spring_dates)
@@ -301,6 +304,7 @@ trans_table_spring <- data.frame(years_spr, td_spring_DOY)
 # Plot spring green-up dates
 plot(trans_table_spring[,1],trans_table_spring[,2], 
     type = "b", col = "darkgreen",
+    cex = 2, cex.lab = 2, cex.axis = 2, cex.main = 3,
     xlab = 'Year', ylab = 'Spring Transition Date (DOY)',
     main = 'Date of Spring Onset Through the Years')
 ```
@@ -318,7 +322,8 @@ trans_table_fall <- data.frame(years_fall, td_fall_DOY)
 # Plot fall brown-down dates
 plot(trans_table_fall[,1],trans_table_fall[,2], 
      type = "b", col = "brown",
-     xlab = 'Year', ylab = 'Fall Transition Date (DOY)',
+     cex = 2, cex.lab = 2, cex.axis = 2, cex.main = 3,
+     xlab = 'Year', ylab = 'Autumn Transition Date (DOY)',
      main = 'Date of Autumn Onset Through the Years')
 ```
 
@@ -356,7 +361,7 @@ Then we'll create the layout.
 
 ```{r}
 # Set up image layout (4 rows & 3 columns)
-par(mar= c(0,0,0,0), mfrow=c(4,3), oma=c(0,0,3,0))
+par(mar= c(0,0,0,0), mfrow=c(4,3), oma=c(0,25,3,25))
 
 # Create monthly image layout with labels (this can take 1-2 min)
 for(i in 1:n){
@@ -373,7 +378,6 @@ mtext('Canopy Greenness Through the Months', font = 2, cex = 1.8, outer = TRUE)
 Finally, we'll use those same images to create a gif that shows changes in phenology over time. These are great to use in presentations to visualize seasonal transitions!
 
 ```{r}
-
 # Make timelapse gif of images
 gif <- list.files(path = dir, pattern = "*.jpg", full.names = T) %>% 
 
