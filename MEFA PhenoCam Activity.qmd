@@ -209,7 +209,7 @@ Now, we'll plot the GCC timeseries to see how canopy greenness changes over time
 # Put date into date format
 GCC_timeseries[,date:=as.Date(date)]
 
-#Adjust plot area margins
+# Adjust plot area margins
 par(mar=c(5, 6, 4, 2))
 
 # Create line plot
