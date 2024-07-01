@@ -238,6 +238,12 @@ trans_dates <- read.table(trans_dates_path),
                  header = TRUE,
                  sep = ",")
 
+```
+
+Now we'll plot the transition dates on the GCC timeseries.
+
+```{r}
+
 # Pull out transition dates from the trans_dates table
 
 # Select the rising (spring dates) for 50% threshold of Gcc 90
@@ -389,6 +395,8 @@ dir
 As an example, here's the gif I made for the lacclair site. Your gif will be saved to the working directory you indicated at the beginning (called "dir").
 
 <img src="images/MonthlyGreenness_gif.gif" align="left" width="750"/>
+
+<br>
 
 #### Thank you!
 
