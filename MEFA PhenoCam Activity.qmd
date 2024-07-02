@@ -177,13 +177,13 @@ Now, let's view some PhenoCam images and greenness data. Choose a site to explor
 
 ```{r}
 # Choose site to explore
-site_name = "lacclair"
+site_name = "butte"
 
 # Indicate vegetation type (listed on site page)
-veg = "DB"
+veg = "GR"
 
 # Choose data year
-year = 2022
+year = 2018
 
 # Indicate ROI ID
 ROI = 1000
@@ -215,7 +215,7 @@ par(mar=c(5, 6, 4, 2))
 # Create line plot
 plot(GCC_timeseries$date, GCC_timeseries$gcc_90, 
     col = "darkgreen", type = "b",
-    cex = 2, cex.lab = 2, cex.axis = 2, cex.main = 3,
+    cex = 1.5, cex.lab = 2, cex.axis = 2, cex.main = 3,
     xlab = 'Date', ylab = 'GCC', 
     main = 'Canopy Greenness Timeseries')
 ```
@@ -258,7 +258,7 @@ td_fall <- trans_dates[trans_dates$direction == "falling" & trans_dates$gcc_valu
 
 # As above, create a simple line graph of the Green Chromatic Coordinate (GCC)
 
-# Plot- this time we use "type = 1" to create a smooth line graph
+# Plot- this time use "type = 1" to create a smooth line graph
 plot(GCC_timeseries$date, GCC_timeseries$gcc_90, 
      col = "black", type = "l",
      cex = 2, cex.lab = 2, cex.axis = 2, cex.main = 3,
@@ -271,13 +271,13 @@ plot(GCC_timeseries$date, GCC_timeseries$gcc_90,
 # Spring green-up
 points(x = as.Date(td_rise$transition_50, origin = "1970-01-01"),
        y = td_rise$threshold_50,
-       pch = 19,
+       pch = 19, cex = 2,
        col = "green")
 
 # Fall brown-down
 points(x = as.Date(td_fall$transition_50, origin = "1970-01-01"),
        y = td_fall$threshold_50,
-       pch = 19,
+       pch = 19, cex = 2,
        col = "brown")
 ```
 
@@ -327,7 +327,7 @@ As you can see, there is a decent amount of year-to-year variability in when a s
 
 ### Download PhenoCam Images
 
-Next, we'll download some photos from your chosen site. Images are typically taken every 30 minutes, but for simplicity, we'll just download 1 image per month in order to visualize phenology changes. This code downloads the midday (\~12 pm) image for the 15th day ("days = 15") of each month ("months = 1:12"). The images will appear in the working directory folder you designated above (dir).
+Next, we'll download some photos from your chosen site. Images are typically taken every 30 minutes, but for simplicity, we'll just download 1 image per month in order to visualize phenology changes. This code downloads the midday (\~12 pm) image for the 15th day ("days = 15") of each month ("months = 1:12") for the year you chose above. The images will appear in the folder you designated above (dir).
 
 ```{r}
 # Download PhenoCam images
@@ -398,13 +398,15 @@ gif <- list.files(path = dir, pattern = "*.jpg", full.names = T) %>%
 dir
 ```
 
-As an example, here's the gif I made for the lacclair site. Your gif will be saved to the working directory you indicated at the beginning (called "dir").
+As an example, here's the gif I made for the lacclair site. Your gif will be saved to the directory you indicated at the beginning (called "dir").
 
 <img src="images/MonthlyGreenness_gif.gif" align="left" width="750"/>/
 
 #### Thank you!
 
-If you'd like, now try this exercise with another PhenoCam site. Be sure to either clear your working directory folder (delete the downloaded photos/files) or create/designate a new folder directory before trying a new site. And run this command to re-set your plotting parameters:
+If you'd like, now try this exercise with another PhenoCam site. Perhaps try a different ecosystem type!
+
+Before trying a new site, be sure to either clear your working directory folder (delete the downloaded photos/files) or create/designate a new folder. And run this command to re-set your plotting parameters:
 
 ```{r}
 dev.off()
