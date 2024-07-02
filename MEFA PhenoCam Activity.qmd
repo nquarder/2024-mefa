@@ -176,14 +176,15 @@ ggplotly(Site_map)
 Now, let's view some PhenoCam images and greenness data. Choose a site to explore, and enter the site name and relevant information in the cell below. For example, I chose the site "lacclair", which represents a deciduous broadleaf ("DB") vegetation type, and I chose to look at data from the year 2022. You'll also need to specify which region of interest (ROI) to use for your site. Recall that some sites have multiple ROIs, each with a unique ID number. You can view the possible ROIs for your site on the [PhenoCam website.](https://phenocam.nau.edu/webcam/)
 
 ```{r}
-# Choose site to explore
-site_name = "butte"
+# Choose site to explore 
+# Enter name exactly as it appears in the table/on the website
+site_name = "lacclair"
 
 # Indicate vegetation type (listed on site page)
-veg = "GR"
+veg = "DB"
 
 # Choose data year
-year = 2018
+year = 2022
 
 # Indicate ROI ID
 ROI = 1000
