@@ -6,7 +6,10 @@
         "r.plot.devArgs": {
               "width": 1200,
               "height": 500
-            }
+            },
+        "workbench.editorAssociations": {
+            "*.qmd": "vscode.markdown.preview.editor"
+        }
     },
     "extensions": [
         "REditorSupport.r",
